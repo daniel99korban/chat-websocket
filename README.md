@@ -23,7 +23,7 @@ git clone https://github.com/daniel99korban/chat-websocket.git
 ~~~
 ### Etapa 2
 ~~~
-npm init
+npm install
 ~~~
 ### Inicie a Aplicaão
 ~~~
