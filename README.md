@@ -19,7 +19,7 @@ git clone https://github.com/socketio/chat-example.git
 
 ### Clone o Repositório
 ~~~
-git clone
+git clone https://github.com/daniel99korban/chat-websocket.git
 ~~~
 ### Etapa 2
 ~~~
