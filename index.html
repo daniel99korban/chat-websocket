@@ -16,6 +16,7 @@
     </style>
   </head>
   <body>
+    <h2 id="status"></h2>
     <ul id="messages"></ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
@@ -27,6 +28,7 @@
         var messages = document.getElementById('messages');
         var form = document.getElementById('form');
         var input = document.getElementById('input');
+        var status = document.getElementById('status');
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -34,6 +36,11 @@
                 socket.emit('chat message', input.value);
                 input.value = '';
             }
+        });
+
+        form.addEventListener('click', function(e){
+          status.textContent = "digitanto...";
+          socket.emit('chat message', status.textContent);
         });
 
         socket.on('chat message', function(msg) {
