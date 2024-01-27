@@ -13,10 +13,14 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
+      #status{
+        display: none;
+      }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   </head>
   <body>
-    <h2 id="status"></h2>
+    <div id="status">digitando...</div>
     <ul id="messages"></ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
@@ -27,27 +31,35 @@
 
         var messages = document.getElementById('messages');
         var form = document.getElementById('form');
-        var input = document.getElementById('input');
+        var inputField = document.getElementById('input');
         var status = document.getElementById('status');
+        var typingTimer;
 
         form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (input.value) {
-                socket.emit('chat message', input.value);
-                input.value = '';
-            }
+          e.preventDefault();
+          if (inputField.value) {
+            // emite mensagem para o servidor
+            socket.emit('chat message', inputField.value);
+            inputField.value = '';
+            $('#status').css('display', 'none');
+          }
         });
 
-        form.addEventListener('click', function(e){
-          status.textContent = "digitanto...";
-          socket.emit('chat message', status.textContent);
+        inputField.addEventListener('input', function() {
+          $('#status').css('display', 'block');
+          clearTimeout(typingTimer);
+          typingTimer = setTimeout(function() {
+            $('#status').css('display', 'none');
+            // status.style.display = 'none';
+          }, 1000);
         });
 
-        socket.on('chat message', function(msg) {
-            var item = document.createElement('li');
-            item.textContent = msg;
-            messages.appendChild(item);
-            window.scrollTo(0, document.body.scrollHeight);
+        // ouvinte das mensagens que vem do servidor
+        socket.on('chat message response', function(msg) {
+          var item = document.createElement('li');
+          item.textContent = msg;
+          messages.appendChild(item);
+          window.scrollTo(0, document.body.scrollHeight);
         });
     </script>
   </body>
